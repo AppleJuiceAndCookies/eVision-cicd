@@ -12,7 +12,7 @@ resource "aws_alb" "eVision_alb" {
 
 resource "aws_lb_target_group" "eVision_target_group" {
   name        = "eVision-target-group"
-  port        = var.var.eVision_container_port
+  port        = var.eVision_container_port
   protocol    = "HTTP"
   target_type = "ip"
   vpc_id      = "${aws_default_vpc.eVision_default_vpc.id}" # Referencing the default VPC

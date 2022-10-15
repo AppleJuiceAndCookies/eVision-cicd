@@ -13,10 +13,10 @@ variable "eVision_ecr_repository_url" {
   type = string
 }
 
-variable "eVision_memory" {
+variable eVision_memory {
   type = number
 }
-variable "eVision_cpu" {
+variable eVision_cpu {
   type = number
 }
 variable "eVision_container_port" {

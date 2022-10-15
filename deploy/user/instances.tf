@@ -18,15 +18,15 @@ resource "aws_ecs_task_definition" "eVision_task" {
           "Protocol": "tcp"
         }
       ],
-      "memory": ${var.eVision_memory},
-      "cpu": ${var.eVision_cpu}
+      "memory": 512,
+      "cpu": 256
     }
   ]
   DEFINITION
   requires_compatibilities = ["FARGATE"] # Stating that we are using ECS Fargate
   network_mode             = "awsvpc"    # Using awsvpc as our network mode as this is required for Fargate
-  memory                   = var.eVision_memory       # Specifying the memory our container requires
-  cpu                      = var.eVision_cpu         # Specifying the CPU our container requires
+  memory                   = 512       # Specifying the memory our container requires
+  cpu                      = 256         # Specifying the CPU our container requires
   execution_role_arn       = var.IAMecsTaskExecutionRoleARN #"${aws_iam_role.ecsTaskExecutionRole.arn}"
 }
 
