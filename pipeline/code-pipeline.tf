@@ -55,6 +55,26 @@ resource "aws_codepipeline" "eVision_pipeline" {
               type  = "PLAINTEXT"
               value = var.env
             },
+            {
+              name  = "IMAGE_REPO_NAME"
+              type  = "PLAINTEXT"
+              value = var.IMAGE_REPO_NAME
+            },
+            {
+              name  = "ACCOUNT_ID"
+              type  = "PLAINTEXT"
+              value = var.ACCOUNT_ID
+            },
+            {
+              name  = "AWS_DEFAULT_REGION"
+              type  = "PLAINTEXT"
+              value = var.AWS_DEFAULT_REGION
+            },
+            {
+              name  = "REPOSITORY_URI"
+              type  = "PLAINTEXT"
+              value = var.REPOSITORY_URI
+            },
           ]
         )
         "ProjectName" = "${var.service_name}-build"

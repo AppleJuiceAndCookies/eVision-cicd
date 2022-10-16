@@ -12,7 +12,7 @@ resource "aws_codebuild_project" "eVision_build" {
   queued_timeout = 480
   service_role   = var.pipeline_role
   tags = {
-    Environment = var.env
+    Environment  = var.env
   }
 
   artifacts {
@@ -26,8 +26,9 @@ resource "aws_codebuild_project" "eVision_build" {
   environment {
     compute_type                = "BUILD_GENERAL1_SMALL"
     image                       = "aws/codebuild/amazonlinux2-x86_64-standard:2.0"
+    # image                       = "aws/codebuild/standard:4.0"
     image_pull_credentials_type = "CODEBUILD"
-    privileged_mode             = false
+    privileged_mode             = true
     type                        = "LINUX_CONTAINER"
   }
 
@@ -45,7 +46,7 @@ resource "aws_codebuild_project" "eVision_build" {
   source {
     buildspec           = data.template_file.eVision_buildspec.rendered
     git_clone_depth     = 0
-    insecure_ssl        = false
+    insecure_ssl        = true
     report_build_status = false
     type                = "CODEPIPELINE"
   }

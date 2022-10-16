@@ -54,10 +54,10 @@ variable "AWS_DEFAULT_REGION" {
   default     = "us-east-1"
 }
 
-# variable REPOSITORY_URI {
-#   description = "WS Cluster ECS"
-#   default     = "${ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
-# }
+variable REPOSITORY_URI {
+  description = "WS Cluster ECS"
+  default     = "$ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com"
+}
 
 variable IMAGE_REPO_NAME {
   description = "WS Cluster ECS"
