@@ -43,7 +43,6 @@ variable "ecs_cluster_name" {
 }
 
 ### For buildspec.yml
-
 variable ACCOUNT_ID {
   description = "WS Cluster ECS"
   default     = "564571135814"
@@ -56,7 +55,7 @@ variable "AWS_DEFAULT_REGION" {
 
 variable REPOSITORY_URI {
   description = "WS Cluster ECS"
-  default     = "$ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com"
+  default     = "564571135814.dkr.ecr.us-east-1.amazonaws.com"
 }
 
 variable IMAGE_REPO_NAME {
@@ -72,4 +71,17 @@ variable "pipeline_role" {
 
 variable github_connection_arn {
   description = "AWS GitHub Connection"
+}
+
+### Deploy
+
+variable "eVision_ecr_repository_url" {
+  description = "AWS ECR Repo URL"
+  type = string
+  default = "564571135814.dkr.ecr.us-east-1.amazonaws.com/evision"
+}
+
+variable "eVision_container_port" {
+  type = number
+  default = 8080
 }

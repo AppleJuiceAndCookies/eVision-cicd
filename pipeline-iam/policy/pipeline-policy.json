@@ -6,8 +6,10 @@
             "Action": [
                 "ecr:BatchCheckLayerAvailability",
                 "ecr:CompleteLayerUpload",
+                "ecr:GetDownloadUrlForLayer",
                 "ecr:GetAuthorizationToken",
                 "ecr:InitiateLayerUpload",
+                "ecr:BatchGetImage",
                 "ecr:PutImage",
                 "ecr:UploadLayerPart",
                 "ecr:DescribeImages"
@@ -101,7 +103,7 @@
                 "codedeploy:RegisterApplicationRevision"
             ],
             "Resource": [
-                "arn:aws:codedeploy:us-east-1:ACCOUNT_ID:*"
+                "*"
             ]
         },
         {
@@ -130,6 +132,28 @@
             "Effect": "Allow",
             "Action": "codestar-connections:UseConnection",
             "Resource": "arn:aws:codestar-connections:us-east-1:ACCOUNT_ID:connection/*"
+        },
+        {
+            "Action": [
+                "ecs:DescribeServices",
+                "ecs:CreateTaskSet",
+                "ecs:UpdateServicePrimaryTaskSet",
+                "ecs:DeleteTaskSet",
+                "elasticloadbalancing:DescribeTargetGroups",
+                "elasticloadbalancing:DescribeListeners",
+                "elasticloadbalancing:ModifyListener",
+                "elasticloadbalancing:DescribeRules",
+                "elasticloadbalancing:ModifyRule",
+                "lambda:InvokeFunction",
+                "cloudwatch:DescribeAlarms",
+                "sns:Publish",
+                "s3:GetObject",
+                "s3:GetObjectVersion"
+            ],
+            "Resource": "*",
+            "Effect": "Allow"
         }
     ]
 }
+
+

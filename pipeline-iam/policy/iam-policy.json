@@ -8,8 +8,7 @@
                 "iam:PassRole"
             ],
             "Resource": [
-                "arn:aws:iam::ACCOUNT_ID:role/PIPELINE_ROLE_NAME",
-                "arn:aws:iam::564571135814:role/AWSPipelineRoleTerraform"
+                "arn:aws:iam::ACCOUNT_ID:role/PIPELINE_ROLE_NAME"
             ]
         }
     ]

@@ -5,16 +5,20 @@ phases:
     commands:
       - echo Build started on `date`
       - VERSION=`cat version`
-      - echo Building the Docker image $REPOSITORY_URI/$IMAGE_REPO_NAME:$VERSION
-      - docker build . --build-arg IMAGE_TAG=$VERSION --tag $REPOSITORY_URI/$IMAGE_REPO_NAME:$VERSION
-  build:
-    commands:
       - echo Logging in to Amazon ECR
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $REPOSITORY_URI 
+  build:
+    commands:
+      - echo Building the Docker image $REPOSITORY_URI/$IMAGE_REPO_NAME:$VERSION
+      - docker build . --build-arg IMAGE_TAG=$VERSION --tag $REPOSITORY_URI/$IMAGE_REPO_NAME:$VERSION
       - docker tag $REPOSITORY_URI/$IMAGE_REPO_NAME:$VERSION $REPOSITORY_URI/$IMAGE_REPO_NAME:latest
+      - echo Build completed on `date`
   post_build:
     commands:
-      - echo Build completed on `date`
       - echo Pushing the Docker image
       - docker push $REPOSITORY_URI/$IMAGE_REPO_NAME:latest
       - docker push $REPOSITORY_URI/$IMAGE_REPO_NAME:$VERSION
+      - printf '[{"name":"$IMAGE_REPO_NAME","imageUri":"%s"}]' $REPOSITORY_URI/$IMAGE_REPO_NAME:$VERSION > imagedefinitions.json
+  
+artifacts:
+  files: imagedefinitions.json
