@@ -109,6 +109,7 @@ resource "aws_codepipeline" "eVision_pipeline" {
       configuration = {
         ClusterName = var.ecs_cluster_name
         ServiceName = var.service_name
+        FileName    = var.image_file_name
       }
     }
   }

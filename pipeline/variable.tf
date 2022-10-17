@@ -42,6 +42,11 @@ variable "ecs_cluster_name" {
   default     = "eVision-cluster"
 }
 
+variable "image_file_name" {
+  description = "Meta image information for deploy to ECS"
+  default     = "imagedefinitions.json"
+}
+
 ### For buildspec.yml
 variable ACCOUNT_ID {
   description = "WS Cluster ECS"
