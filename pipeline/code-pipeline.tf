@@ -99,17 +99,26 @@ resource "aws_codepipeline" "eVision_pipeline" {
       name            = "Deploy"
       category        = "Deploy"
       owner           = "AWS"
-      provider        = "ECS"
+      # provider        = "ECS"
+      provider = "CodeDeployToECS"
       input_artifacts = [
         "BuildArtifact",
       ]
       run_order        = 1
       version         = "1"
 
+      # configuration = {
+      #   ClusterName = var.ecs_cluster_name
+      #   ServiceName = var.service_name
+      #   FileName    = "imagedefinitions.json" #var.image_file_name
+      # }
       configuration = {
-        ClusterName = var.ecs_cluster_name
-        ServiceName = var.service_name
-        FileName    = var.image_file_name
+        ApplicationName = "${var.service_name}-service-deploy"
+        DeploymentGroupName = "${var.service_name}-service-deploy-group"
+        TaskDefinitionTemplateArtifact = "BuildArtifact"
+        # TaskDefinitionTemplatePath = "taskdef.json"
+        AppSpecTemplateArtifact = "BuildArtifact"
+        AppSpecTemplatePath = "appspec.yaml"
       }
     }
   }
