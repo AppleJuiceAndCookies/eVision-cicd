@@ -26,11 +26,11 @@ phases:
       - echo imagedefinitions.json
       - printf '[{"name":"eVision-task","imageUri":"%s"}]' $REPOSITORY_URI/$IMAGE_REPO_NAME > imagedefinitions.json
       - echo taskdef.json
-      - sed -e 's#{{\s\([a-zA-Z_-]\)\s*}}#s{\1}#g' taskdef.json | envsubst | envsubst > taskdef.json
+      - sed -e 's#{{\s\([a-zA-Z_-]\)\s*}}#s{\1}#g' taskdef.json.j2 | envsubst | envsubst > taskdef.json
       - echo appspec.yaml
       - ECS_TASK_DEFINITION="$(echo "$ECS_TASK_DEFINITION" | sed -e 's/[()\/]/\\\//g' )"
       - echo ECS_TASK_DEFINITION=$ECS_TASK_DEFINITION
-      - sed -e 's#{{\s\([a-zA-Z_-]\)\s*}}#s{\1}#g' appspec.yaml | envsubst | envsubst > appspec.yaml
+      - sed -e 's#{{\s\([a-zA-Z_-]\)\s*}}#s{\1}#g' appspec.yaml.j2 | envsubst | envsubst > appspec.yaml
 
 artifacts:
   files:
