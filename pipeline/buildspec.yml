@@ -5,6 +5,8 @@ phases:
     commands:
       - echo Build started on `date`
       - VERSION=`cat version`
+      - echo Check ENV
+      - echo CONTAINER_IMAGE=$CONTAINER_IMAGE, CONTAINER_ROLE_ARN=$CONTAINER_ROLE_ARN, ECS_SUBNETS_A=$ECS_SUBNETS_A, ECS_SECURITY_GROUPS=$ECS_SECURITY_GROUPS
       - echo Logging in to Amazon ECR
       - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $REPOSITORY_URI 
   build:
@@ -13,12 +15,27 @@ phases:
       - docker build . --build-arg IMAGE_TAG=$VERSION --tag $REPOSITORY_URI/$IMAGE_REPO_NAME:$VERSION
       - docker tag $REPOSITORY_URI/$IMAGE_REPO_NAME:$VERSION $REPOSITORY_URI/$IMAGE_REPO_NAME:latest
       - echo Build completed on `date`
-  post_build:
-    commands:
       - echo Pushing the Docker image
       - docker push $REPOSITORY_URI/$IMAGE_REPO_NAME:latest
       - docker push $REPOSITORY_URI/$IMAGE_REPO_NAME:$VERSION
+  post_build:
+    commands:
+      - echo Prepare artifacts
+      - echo imageDetail.json
+      - printf '{"ImageURI":"%s"}' $REPOSITORY_URI/$IMAGE_REPO_NAME:latest > imageDetail.json
+      - echo imagedefinitions.json
       - printf '[{"name":"eVision-task","imageUri":"%s"}]' $REPOSITORY_URI/$IMAGE_REPO_NAME:latest > imagedefinitions.json
-  
+      - echo taskdef.json
+      - sed -i -e "s/\$CONTAINER_IMAGE/$CONTAINER_IMAGE/g; s/\$REPOSITORY_URI/$REPOSITORY_URI/g; s/\$IMAGE_REPO_NAME/$IMAGE_REPO_NAME/g" taskdef.json
+      - sed -i -e "s/\$CONTAINER_PORT/$CONTAINER_PORT/g; s/\$CONTAINER_ROLE_ARN/$CONTAINER_ROLE_ARN/g; s/\$ACCOUNT_ID/$ACCOUNT_ID/g" taskdef.json
+      - echo appspec.yaml 
+      - sed -i -e "s/\$ECS_TASK_DEFINITION/$ECS_TASK_DEFINITION/g; s/\$ECS_CONTAINER_NAME/$ECS_CONTAINER_NAME/g; s/\$IMAGE_REPO_NAME/$IMAGE_REPO_NAME/g" appspec.yaml
+      - sed -i -e "s/\$CONTAINER_PORT/$CONTAINER_PORT/g; s/\$ECS_SECURITY_GROUPS/$ECS_SECURITY_GROUPS/g" appspec.yaml
+      - sed -i -e "s/\$ECS_SUBNETS_A/$ECS_SUBNETS_A/g; s/\$ECS_SUBNETS_B/$ECS_SUBNETS_B/g; s/\$ECS_SUBNETS_C/$ECS_SUBNETS_C/g" appspec.yaml
+
 artifacts:
-  files: imagedefinitions.json
+  files:
+    - imageDetail.json
+    - imagedefinitions.json
+    - taskdef.json
+    - appspec.yaml

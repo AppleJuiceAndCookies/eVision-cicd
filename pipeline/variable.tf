@@ -44,7 +44,7 @@ variable "ecs_cluster_name" {
 
 variable "image_file_name" {
   description = "Meta image information for deploy to ECS"
-  default     = "imagedefinitions.json"
+  default     = "imagedetail.json"
 }
 
 ### For buildspec.yml
@@ -67,6 +67,19 @@ variable IMAGE_REPO_NAME {
   description = "WS Cluster ECS"
   default     = "evision"
 }
+variable CONTAINER_IMAGE {
+  description = "ECS container name"
+  default     = "eVision-task"
+}
+variable CONTAINER_PORT {
+  description = "Port for container"
+  default     = 8080
+}
+variable CONTAINER_ROLE_ARN {
+  description = "Role for ECS"
+  default     = "AWSPipelineRoleTerraform"
+}
+
 
 ### Access
 variable "pipeline_role" {
