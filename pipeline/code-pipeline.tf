@@ -135,8 +135,8 @@ resource "aws_codepipeline" "eVision_pipeline" {
             {
               name  = "ECS_TASK_DEFINITION"
               # type  = "PLAINTEXT"
-              value = var.CONTAINER_IMAGE
-              # value = "${aws_ecs_task_definition.eVision_task.arn}"
+              # value = var.CONTAINER_IMAGE
+              value = "${aws_ecs_task_definition.eVision_task.arn}"
             },
             {
               name  = "ECS_CONTAINER_NAME"
@@ -208,8 +208,8 @@ resource "aws_codepipeline" "eVision_pipeline" {
         TaskDefinitionTemplatePath     = "taskdef.json"
         AppSpecTemplateArtifact        = "BuildArtifact"
         AppSpecTemplatePath            = "appspec.yaml"
-        Image1ArtifactName             = "BuildArtifact"
-        Image1ContainerName            = "${var.eVision_ecr_repository_url}:latest"
+        # Image1ArtifactName             = "BuildArtifact"
+        # Image1ContainerName            = "${var.eVision_ecr_repository_url}"
       }
     }
   }

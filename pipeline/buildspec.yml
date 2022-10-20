@@ -24,14 +24,13 @@ phases:
       - echo imageDetail.json
       - printf '{"ImageURI":"%s"}' $REPOSITORY_URI/$IMAGE_REPO_NAME:latest > imageDetail.json
       - echo imagedefinitions.json
-      - printf '[{"name":"eVision-task","imageUri":"%s"}]' $REPOSITORY_URI/$IMAGE_REPO_NAME:latest > imagedefinitions.json
+      - printf '[{"name":"eVision-task","imageUri":"%s"}]' $REPOSITORY_URI/$IMAGE_REPO_NAME > imagedefinitions.json
       - echo taskdef.json
-      - sed -i -e "s/\$CONTAINER_IMAGE/$CONTAINER_IMAGE/g; s/\$REPOSITORY_URI/$REPOSITORY_URI/g; s/\$IMAGE_REPO_NAME/$IMAGE_REPO_NAME/g" taskdef.json
-      - sed -i -e "s/\$CONTAINER_PORT/$CONTAINER_PORT/g; s/\$CONTAINER_ROLE_ARN/$CONTAINER_ROLE_ARN/g; s/\$ACCOUNT_ID/$ACCOUNT_ID/g" taskdef.json
-      - echo appspec.yaml 
-      - sed -i -e "s/\$ECS_TASK_DEFINITION/$ECS_TASK_DEFINITION/g; s/\$ECS_CONTAINER_NAME/$ECS_CONTAINER_NAME/g; s/\$IMAGE_REPO_NAME/$IMAGE_REPO_NAME/g" appspec.yaml
-      - sed -i -e "s/\$CONTAINER_PORT/$CONTAINER_PORT/g; s/\$ECS_SECURITY_GROUPS/$ECS_SECURITY_GROUPS/g" appspec.yaml
-      - sed -i -e "s/\$ECS_SUBNETS_A/$ECS_SUBNETS_A/g; s/\$ECS_SUBNETS_B/$ECS_SUBNETS_B/g; s/\$ECS_SUBNETS_C/$ECS_SUBNETS_C/g" appspec.yaml
+      - sed -e 's#{{\s\([a-zA-Z_-]\)\s*}}#s{\1}#g' taskdef.json | envsubst | envsubst > taskdef.json
+      - echo appspec.yaml
+      - ECS_TASK_DEFINITION="$(echo "$ECS_TASK_DEFINITION" | sed -e 's/[()\/]/\\\//g' )"
+      - echo ECS_TASK_DEFINITION=$ECS_TASK_DEFINITION
+      - sed -e 's#{{\s\([a-zA-Z_-]\)\s*}}#s{\1}#g' appspec.yaml | envsubst | envsubst > appspec.yaml
 
 artifacts:
   files:
