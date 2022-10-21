@@ -5,31 +5,24 @@ phases:
     commands:
       - echo Build started on `date`
       - VERSION=`cat version`
-      - echo Check ENV
-      - echo CONTAINER_IMAGE=$CONTAINER_IMAGE, CONTAINER_ROLE_ARN=$CONTAINER_ROLE_ARN, ECS_SUBNETS_A=$ECS_SUBNETS_A, ECS_SECURITY_GROUPS=$ECS_SECURITY_GROUPS
-      - echo Logging in to Amazon ECR
-      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $REPOSITORY_URI 
+      - echo Logging in to DockerHub
+      - echo "$DOCKER_PASS" | docker login docker.pkg.github.com --username "$DOCKER_USER" --password-stdin
   build:
     commands:
       - echo Building the Docker image $REPOSITORY_URI/$IMAGE_REPO_NAME:$VERSION
       - docker build . --build-arg IMAGE_TAG=$VERSION --tag $REPOSITORY_URI/$IMAGE_REPO_NAME:$VERSION
       - docker tag $REPOSITORY_URI/$IMAGE_REPO_NAME:$VERSION $REPOSITORY_URI/$IMAGE_REPO_NAME:latest
       - echo Build completed on `date`
-      - echo Pushing the Docker image
+      - echo Logging in to Amazon ECR
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $REPOSITORY_URI
       - docker push $REPOSITORY_URI/$IMAGE_REPO_NAME:latest
       - docker push $REPOSITORY_URI/$IMAGE_REPO_NAME:$VERSION
   post_build:
     commands:
       - echo Prepare artifacts
-      - echo imageDetail.json
       - printf '{"ImageURI":"%s"}' $REPOSITORY_URI/$IMAGE_REPO_NAME:latest > imageDetail.json
-      - echo imagedefinitions.json
       - printf '[{"name":"eVision-task","imageUri":"%s"}]' $REPOSITORY_URI/$IMAGE_REPO_NAME > imagedefinitions.json
-      - echo taskdef.json
       - sed -e 's#{{\s\([a-zA-Z_-]\)\s*}}#s{\1}#g' taskdef.json.j2 | envsubst | envsubst > taskdef.json
-      - echo appspec.yaml
-      - ECS_TASK_DEFINITION="$(echo "$ECS_TASK_DEFINITION" | sed -e 's/[()\/]/\\\//g' )"
-      - echo ECS_TASK_DEFINITION=$ECS_TASK_DEFINITION
       - sed -e 's#{{\s\([a-zA-Z_-]\)\s*}}#s{\1}#g' appspec.yaml.j2 | envsubst | envsubst > appspec.yaml
 
 artifacts:

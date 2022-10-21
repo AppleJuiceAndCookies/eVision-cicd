@@ -78,8 +78,8 @@ variable CONTAINER_PORT {
 variable CONTAINER_ROLE_ARN {
   description = "Role for ECS"
   default     = "AWSPipelineRoleTerraform"
+  # default     = "arn:aws:iam::564571135814:role/AWSPipelineRoleTerraform"
 }
-
 
 ### Access
 variable "pipeline_role" {

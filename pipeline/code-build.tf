@@ -5,6 +5,13 @@ data "template_file" "eVision_buildspec" {
   }
 }
 
+data "aws_secretsmanager_secret" "docker_secret" {
+  name = "dockerhub"
+}
+data "aws_secretsmanager_secret_version" "docker_creds" {
+  secret_id = data.aws_secretsmanager_secret.docker_secret.id
+}
+
 resource "aws_codebuild_project" "eVision_build" {
   badge_enabled  = false
   build_timeout  = 60

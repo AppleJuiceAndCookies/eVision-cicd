@@ -94,75 +94,68 @@ resource "aws_codepipeline" "eVision_pipeline" {
           [
             {
               name  = "environment"
-              # type  = "PLAINTEXT"
               value = var.env
             },
             {
               name  = "CONTAINER_IMAGE"
-              # type  = "PLAINTEXT"
               value = var.CONTAINER_IMAGE
             },
             {
               name  = "IMAGE_REPO_NAME"
-              # type  = "PLAINTEXT"
               value = var.IMAGE_REPO_NAME
             },
             {
               name  = "ACCOUNT_ID"
-              # type  = "PLAINTEXT"
               value = var.ACCOUNT_ID
             },
             {
               name  = "AWS_DEFAULT_REGION"
-              # type  = "PLAINTEXT"
               value = var.AWS_DEFAULT_REGION
             },
             {
               name  = "REPOSITORY_URI"
-              # type  = "PLAINTEXT"
               value = var.REPOSITORY_URI 
             },
             {
               name  = "CONTAINER_PORT"
-              # type  = "PLAINTEXT"
               value = var.CONTAINER_PORT
             },
             {
               name  = "CONTAINER_ROLE_ARN"
-              # type  = "PLAINTEXT"
               value = var.CONTAINER_ROLE_ARN
             },
             {
               name  = "ECS_TASK_DEFINITION"
-              # type  = "PLAINTEXT"
-              # value = var.CONTAINER_IMAGE
               value = "${aws_ecs_task_definition.eVision_task.arn}"
             },
             {
               name  = "ECS_CONTAINER_NAME"
-              # type  = "PLAINTEXT"
               value = "${aws_ecs_task_definition.eVision_task.family}"
             },
             {
               name  = "ECS_SUBNETS_A"
-              # type  = "PLAINTEXT"
               value =  "${aws_default_subnet.eVision_default_subnet_a.id}"
             },
             {
               name  = "ECS_SUBNETS_B"
-              # type  = "PLAINTEXT"
               value =  "${aws_default_subnet.eVision_default_subnet_b.id}"
             },
             {
               name  = "ECS_SUBNETS_C"
-              # type  = "PLAINTEXT"
               value =  "${aws_default_subnet.eVision_default_subnet_c.id}"
             },
             {
               name  = "ECS_SECURITY_GROUPS"
-              # type  = "PLAINTEXT"
               value =  "${aws_security_group.eVision_service_sg.id}"
             },
+            {
+              name  = "DOCKER_PASS"
+              value = jsondecode(data.aws_secretsmanager_secret_version.docker_creds.secret_string)["password"]
+            },
+            {
+              name  = "DOCKER_USER"
+              value = jsondecode(data.aws_secretsmanager_secret_version.docker_creds.secret_string)["username"]
+            }
           ]
         )
         "ProjectName" = "${var.service_name}-build",
