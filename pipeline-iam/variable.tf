@@ -4,6 +4,11 @@ variable "account_id" {
   default     = "564571135814"
 }
 
+variable "region" {
+  description = "AWS region"
+  default     = "us-east-1"
+}
+
 variable "iam_users_group_name" {
   description = "AWS IAM Policy for User for access to Roles"
   type        = string

@@ -17,7 +17,7 @@ resource "aws_iam_role" "iam_role" {
 
 resource "aws_iam_role_policy" "pipeline_role_policy" {
   role      = aws_iam_role.iam_role.name
-  policy    = replace(replace(data.local_file.pipeline_policy.content, "ACCOUNT_ID", var.account_id), "CODEBUILD_NAME", var.codebuild_name)
+  policy    = replace(replace(replace(replace(data.local_file.pipeline_policy.content, "ACCOUNT_ID", var.account_id), "CODEBUILD_NAME", var.codebuild_name), "AWS_REGION", var.region), "PIPELINE_ROLE_NAME", var.pipeline_role_name)
 }
 
 resource "aws_iam_group_policy" "iam_group_policy" {
