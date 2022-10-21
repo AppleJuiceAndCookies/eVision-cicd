@@ -1,0 +1,33 @@
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      - echo Build started on `date`
+      - VERSION=`cat version`
+      - echo Logging in to DockerHub
+      - echo "$DOCKER_PASS" | docker login docker.pkg.github.com --username "$DOCKER_USER" --password-stdin
+  build:
+    commands:
+      - echo Building the Docker image $REPOSITORY_URI/$IMAGE_REPO_NAME:$VERSION
+      - docker build . --build-arg IMAGE_TAG=$VERSION --tag $REPOSITORY_URI/$IMAGE_REPO_NAME:$VERSION
+      - docker tag $REPOSITORY_URI/$IMAGE_REPO_NAME:$VERSION $REPOSITORY_URI/$IMAGE_REPO_NAME:latest
+      - echo Build completed on `date`
+      - echo Logging in to Amazon ECR
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $REPOSITORY_URI
+      - docker push $REPOSITORY_URI/$IMAGE_REPO_NAME:latest
+      - docker push $REPOSITORY_URI/$IMAGE_REPO_NAME:$VERSION
+  post_build:
+    commands:
+      - echo Prepare artifacts
+      - printf '{"ImageURI":"%s"}' $REPOSITORY_URI/$IMAGE_REPO_NAME:latest > imageDetail.json
+      - printf '[{"name":"eVision-task","imageUri":"%s"}]' $REPOSITORY_URI/$IMAGE_REPO_NAME > imagedefinitions.json
+      - sed -e 's#{{\s\([a-zA-Z_-]\)\s*}}#s{\1}#g' taskdef.json.j2 | envsubst | envsubst > taskdef.json
+      - sed -e 's#{{\s\([a-zA-Z_-]\)\s*}}#s{\1}#g' appspec.yaml.j2 | envsubst | envsubst > appspec.yaml
+
+artifacts:
+  files:
+    - imageDetail.json
+    - imagedefinitions.json
+    - taskdef.json
+    - appspec.yaml

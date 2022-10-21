@@ -1,6 +1,7 @@
 variable "eVision_ecs_cluster_name" {
   description = "AWS Cluster ECS"
   type = string
+  default = "eVision-cluster"
 }
 
 variable "IAMecsTaskExecutionRoleARN" {
@@ -13,12 +14,6 @@ variable "eVision_ecr_repository_url" {
   type = string
 }
 
-variable eVision_memory {
-  type = number
-}
-variable eVision_cpu {
-  type = number
-}
 variable "eVision_container_port" {
   type = number
 }

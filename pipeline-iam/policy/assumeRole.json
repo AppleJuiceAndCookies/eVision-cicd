@@ -1,0 +1,31 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+      {
+        "Effect": "Allow",
+        "Principal": {
+          "Service": [
+            "codebuild.amazonaws.com",
+            "codedeploy.amazonaws.com",
+            "codedeploy.us-east-1.amazonaws.com",
+            "codepipeline.amazonaws.com",
+            "ecs.amazonaws.com",
+            "ecs-tasks.amazonaws.com",
+            "ecs.application-autoscaling.amazonaws.com",
+            "ec2.amazonaws.com",
+            "s3.amazonaws.com",
+            "autoscaling.amazonaws.com",
+            "elasticloadbalancing.amazonaws.com",
+            "logs.amazonaws.com",
+            "cloudwatch.amazonaws.com",
+            "events.amazonaws.com",
+            "lambda.amazonaws.com",
+            "route53.amazonaws.com",
+            "servicediscovery.amazonaws.com",
+            "sns.amazonaws.com"
+          ]
+        },
+        "Action": "sts:AssumeRole"
+      }
+    ]
+  }
