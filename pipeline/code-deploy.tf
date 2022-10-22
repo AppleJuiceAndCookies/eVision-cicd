@@ -43,10 +43,13 @@ resource "aws_codedeploy_deployment_group" "eVision_codedeploy_deployment_group"
 
       target_group {
         name = "${aws_alb_target_group.eVision_target_group.*.name[0]}"
+        # name = "${aws_alb_target_group.eVision_tg_blue.name}"
+        
       }
 
       target_group {
         name = "${aws_alb_target_group.eVision_target_group.*.name[1]}"
+        # name = "${aws_alb_target_group.eVision_tg_green.name}"
       }
     }
   }
