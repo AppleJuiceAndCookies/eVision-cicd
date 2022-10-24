@@ -2,6 +2,9 @@
 CI/CD solutions for eVision project
 
 
+Source code: https://github.com/AppleJuiceAndCookies/eVision-docker
+
+
 ## First solution consists of two parts: build and deploy.
 
 
