@@ -35,11 +35,12 @@ resource "aws_ecs_service" "eVision_service" {
   cluster         = "${aws_ecs_cluster.eVision_ecs_cluster.id}"
   task_definition = "${aws_ecs_task_definition.eVision_task.arn}"
   launch_type     = "FARGATE"
-  desired_count   = 2 # Setting the number of containers we want deployed to 3
+  desired_count   = 1 # Setting the number of containers we want deployed to 3
   deployment_maximum_percent = 200
 
   load_balancer {
-    target_group_arn = "${aws_alb_target_group.eVision_target_group.0.arn}" # Referencing our target group
+    # target_group_arn = "${aws_alb_target_group.eVision_tg_blue.arn}"
+    target_group_arn = "${aws_alb_target_group.eVision_target_group.0.arn}"
     container_name   = "${aws_ecs_task_definition.eVision_task.family}"
     container_port   = var.eVision_container_port # Specifying the container port
   }
@@ -55,4 +56,17 @@ resource "aws_ecs_service" "eVision_service" {
   }
 
   depends_on = [aws_alb_listener.eVision_listener]
+
+  // new
+  # enable_ecs_managed_tags           = true
+  # enable_execute_command            = true
+  # scheduling_strategy               = "REPLICA"
+  # health_check_grace_period_seconds = 120
+  # propagate_tags  = "SERVICE"
+  # lifecycle {
+  #   ignore_changes = [
+  #     task_definition,
+  #     desired_count
+  #   ]
+  # }
 }
