@@ -211,7 +211,6 @@
                 "codedeploy:BatchGetDeploymentGroups",
                 "codedeploy:ListApplications",
                 "codedeploy:ListDeploymentGroups",
-                "iam:ListRoles",
                 "iam:GetRole",
                 "iam:PassRole",
                 "lambda:ListFunctions",
@@ -239,23 +238,7 @@
               "lambda:*",
               "ecs:*",
               "elasticloadbalancing:*",
-              "iam:AddRoleToInstanceProfile",
-              "iam:AttachRolePolicy",
-              "iam:CreateInstanceProfile",
-              "iam:CreateRole",
-              "iam:DeleteInstanceProfile",
-              "iam:DeleteRole",
-              "iam:DeleteRolePolicy",
-              "iam:GetInstanceProfile",
-              "iam:GetRole",
-              "iam:GetRolePolicy",
-              "iam:ListInstanceProfilesForRole",
-              "iam:ListRolePolicies",
-              "iam:ListRoles",
-              "iam:PutRolePolicy",
-              "iam:RemoveRoleFromInstanceProfile",
-              "s3:*",
-              "ssm:*"
+              "s3:*"
             ],
             "Resource": "*"
           }
