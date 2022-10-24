@@ -41,7 +41,6 @@
             "Condition": {
                 "StringLike": {
                     "iam:PassedToService": [
-                        "glue.amazonaws.com",
                         "codedeploy.amazonaws.com",
                         "codedeploy.us-east-1.amazonaws.com",
                         "codepipeline.amazonaws.com",
