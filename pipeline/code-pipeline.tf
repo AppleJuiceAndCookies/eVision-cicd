@@ -64,23 +64,6 @@ resource "aws_codepipeline" "eVision_pipeline" {
     #   }
     #   run_order         = 1
     # }
-
-    # action {
-    #   name             = "TaskDef"
-    #   category         = "Source"
-    #   owner            = "AWS"
-    #   provider         = "S3"
-    #   version          = "1"
-    #   output_artifacts = ["TaskDef"]
-    #   input_artifacts  = []
-
-    #   configuration    = {
-    #     S3Bucket = "${aws_s3_bucket.s3_artifacts_bucket.bucket}"
-    #     S3ObjectKey = "taskdef.json"
-    #     PollForSourceChanges = false
-    #   }
-    #   run_order       = 1
-    # }
   }
   
 
@@ -147,15 +130,15 @@ resource "aws_codepipeline" "eVision_pipeline" {
             {
               name  = "ECS_SECURITY_GROUPS"
               value =  "${aws_security_group.eVision_service_sg.id}"
-            },
-            {
-              name  = "DOCKER_PASS"
-              value = jsondecode(data.aws_secretsmanager_secret_version.docker_creds.secret_string)["password"]
-            },
-            {
-              name  = "DOCKER_USER"
-              value = jsondecode(data.aws_secretsmanager_secret_version.docker_creds.secret_string)["username"]
             }
+            # {
+            #   name  = "DOCKER_PASS"
+            #   value = jsondecode(data.aws_secretsmanager_secret_version.docker_creds.secret_string)["password"]
+            # },
+            # {
+            #   name  = "DOCKER_USER"
+            #   value = jsondecode(data.aws_secretsmanager_secret_version.docker_creds.secret_string)["username"]
+            # }
           ]
         )
         "ProjectName" = "${var.service_name}-build",

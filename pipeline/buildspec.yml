@@ -5,16 +5,14 @@ phases:
     commands:
       - echo Build started on `date`
       - VERSION=`cat version`
-      - echo Logging in to DockerHub
-      - echo "$DOCKER_PASS" | docker login docker.pkg.github.com --username "$DOCKER_USER" --password-stdin
+      - echo Logging in to Amazon ECR
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $REPOSITORY_URI
   build:
     commands:
       - echo Building the Docker image $REPOSITORY_URI/$IMAGE_REPO_NAME:$VERSION
       - docker build . --build-arg IMAGE_TAG=$VERSION --tag $REPOSITORY_URI/$IMAGE_REPO_NAME:$VERSION
       - docker tag $REPOSITORY_URI/$IMAGE_REPO_NAME:$VERSION $REPOSITORY_URI/$IMAGE_REPO_NAME:latest
       - echo Build completed on `date`
-      - echo Logging in to Amazon ECR
-      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $REPOSITORY_URI
       - docker push $REPOSITORY_URI/$IMAGE_REPO_NAME:latest
       - docker push $REPOSITORY_URI/$IMAGE_REPO_NAME:$VERSION
   post_build:

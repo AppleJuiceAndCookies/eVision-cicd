@@ -7,6 +7,7 @@ resource "aws_codedeploy_deployment_group" "eVision_codedeploy_deployment_group"
   app_name               = "${aws_codedeploy_app.eVision_codedeploy_app.name}"
   deployment_group_name  = "${var.service_name}-service-deploy-group"
   deployment_config_name = "CodeDeployDefault.ECSAllAtOnce"
+  # deployment_config_name = "CodeDeployDefault.ECSLinear10PercentEvery1Minutes"
   service_role_arn       = "${var.pipeline_role}"
 
   auto_rollback_configuration {
@@ -54,6 +55,7 @@ resource "aws_codedeploy_deployment_group" "eVision_codedeploy_deployment_group"
     }
   }
 }
+
 
 # resource "aws_s3_object" "appspec_object" {
 #   bucket = var.artifacts_bucket_name

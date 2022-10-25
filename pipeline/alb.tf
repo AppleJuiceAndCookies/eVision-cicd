@@ -50,7 +50,23 @@ resource "aws_alb_listener" "eVision_listener" {
   default_action {
     type             = "forward"
     # target_group_arn = "${aws_alb_target_group.eVision_tg_blue.arn}"
-    target_group_arn = "${aws_alb_target_group.eVision_target_group.0.arn}"
+    # target_group_arn = "${aws_alb_target_group.eVision_target_group.0.arn}"
+
+    forward {
+      stickiness {
+        duration = 3600
+        enabled  = false
+      }
+
+      target_group {
+        arn    = "${aws_alb_target_group.eVision_target_group.0.arn}"
+        weight = 100
+      }
+      target_group {
+        arn    = "${aws_alb_target_group.eVision_target_group.1.arn}"
+        weight = 0
+      }
+    }
   }
 }
 
@@ -62,7 +78,23 @@ resource "aws_alb_listener_rule" "eVision_alb_listener_rule" {
   action {
     type             = "forward"
     # target_group_arn = "${aws_alb_target_group.eVision_tg_green.arn}"
-    target_group_arn = "${aws_alb_target_group.eVision_target_group.*.arn[count.index]}"
+    # target_group_arn = "${aws_alb_target_group.eVision_target_group.*.arn[count.index]}"
+
+    forward {
+      # stickiness {
+      #     duration = 0
+      #     enabled  = false
+      # }
+
+      target_group {
+          arn    = "${aws_alb_target_group.eVision_target_group.0.arn}"
+          weight = 100
+      }
+      target_group {
+          arn    = "${aws_alb_target_group.eVision_target_group.1.arn}"
+          weight = 0
+      }
+    }
   }
 
   condition {
